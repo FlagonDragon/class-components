@@ -45,4 +45,3 @@ const FunctionalInput = ({ name }) => {
 };
 
 export default FunctionalInput;
-
