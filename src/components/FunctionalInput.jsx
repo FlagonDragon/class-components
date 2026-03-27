@@ -19,6 +19,12 @@ const FunctionalInput = ({ name }) => {
     setInputVal('');
   };
 
+  const handleDel = (index) => {
+    let newTodos = todos.slice(0);
+    newTodos.splice(index, 1)
+    setTodos(newTodos);
+  };
+
   return (
     <section>
       <h3>{name}</h3>
@@ -36,8 +42,14 @@ const FunctionalInput = ({ name }) => {
       <h4>All the tasks!</h4>
       {/* The list of all the To-Do's, displayed */}
       <ul>
-        {todos.map((todo) => (
-          <li key={todo}>{todo}</li>
+        {todos.map((todo, index) => (
+          <>
+            <li key={todo}>{todo}
+              <button onClick={() => {
+                handleDel(index)
+              }}>del</button>
+            </li>
+          </>
         ))}
       </ul>
     </section>
