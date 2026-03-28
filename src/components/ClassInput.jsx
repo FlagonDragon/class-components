@@ -12,6 +12,84 @@ class DisplayCount extends Component {
   }
 }
 
+class ListItem extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      edit: false,
+      inputVal: ""
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+
+  };
+
+  handleInputChange(e) {
+    this.setState((state) => ({
+      ...state,
+      inputVal: e.target.value
+    }));
+  }
+
+  render() {
+  return(
+    <> 
+    {this.state.edit ? (
+      <>
+        <input
+          type="text"
+          value={this.state.inputVal}
+          onChange={this.handleInputChange}
+        />
+
+        <button onClick={() => {
+
+            this.setState((state) => ({
+              ...state,
+              edit: false
+            }));
+
+            this.props.editFunc(this.props.index, this.state.inputVal);
+
+            this.setState((state) => ({
+              ...state,
+              inputVal: ''
+            }));
+
+          }}>resubmit</button>
+
+        <button onClick={() => {
+            this.props.delFunc(this.props.index)
+          }}>del</button>
+      </>
+    ) : (
+      <>
+        <li key={this.props.item}>{this.props.item}
+
+          <button onClick={() => {
+            
+            this.setState((state) => ({
+              ...state,
+              edit: true
+            }));
+
+          }}>edit</button>
+
+          <button onClick={() => {
+
+            this.props.delFunc(this.props.index);
+
+          }}>del</button>
+
+        </li>
+      </>
+    )}
+    </>
+  )
+  }
+}
+
 class ClassInput extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +102,7 @@ class ClassInput extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDel = this.handleDel.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
     this.todosCount = this.todosCount.bind(this);
   }
 
@@ -34,9 +113,22 @@ class ClassInput extends Component {
     }));
   }
 
+  handleEdit(index, value) {
+    let newTodos = this.state.todos.slice(0);
+
+    newTodos[index] = value;
+
+    this.setState((state) => ({
+      ...state,
+      todos: newTodos,
+    }));
+  }
+
   handleDel(index) {
     let newTodos = this.state.todos.slice(0);
-    newTodos.splice(index, 1)
+
+    newTodos.splice(index, 1);
+
     this.setState((state) => ({
       ...state,
       todos: newTodos,
@@ -55,6 +147,7 @@ class ClassInput extends Component {
     let count = 0;
 
     this.state.todos.forEach(todo => {
+      console.log(todo);
       count +=1;
     });
     
@@ -80,13 +173,7 @@ class ClassInput extends Component {
         {/* The list of all the To-Do's, displayed */}
         <ul>
         {this.state.todos.map((todo, index) => (
-          <>
-            <li key={todo}>{todo}
-              <button onClick={() => {
-                this.handleDel(index)
-              }}>del</button>
-            </li>
-          </>
+          <ListItem item={todo} index={index} editFunc={this.handleEdit} delFunc={this.handleDel}></ListItem>
         ))}
         </ul>
       </section>
