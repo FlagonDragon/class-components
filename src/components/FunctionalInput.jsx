@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 
+function DisplayCount({count}) {
+
+  return(
+    <div>Todos count: {count}</div>
+  )
+}
+
 const FunctionalInput = ({ name }) => {
   /*
     We declare two state variables and their setters,
@@ -25,9 +32,20 @@ const FunctionalInput = ({ name }) => {
     setTodos(newTodos);
   };
 
+  const todosCount = () => {
+    let count = 0;
+
+    todos.forEach(todo => {
+      count +=1;
+    });
+    
+    return count;
+  };
+
   return (
     <section>
       <h3>{name}</h3>
+      <DisplayCount count={todosCount()}></DisplayCount>
       {/* The input field to enter To-Do's */}
       <form onSubmit={handleSubmit}>
         <label htmlFor="task-entry">Enter a task: </label>
