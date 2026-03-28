@@ -7,6 +7,48 @@ function DisplayCount({count}) {
   )
 }
 
+function ListItem(props) {
+  const [edit, setEdit] = useState(false);
+  const [inputVal, setInputVal] = useState('');
+
+  const handleInputChange = (e) => {
+    setInputVal(e.target.value);
+  };
+  
+  return(
+    <> 
+    {edit ? (
+      <>
+        <input
+          type="text"
+          value={inputVal}
+          onChange={handleInputChange}
+        />
+        <button onClick={() => {
+            setEdit(false);
+            props.editFunc(props.index, inputVal);
+            setInputVal('');
+          }}>resubmit</button>
+        <button onClick={() => {
+            props.delFunc(props.index)
+          }}>del</button>
+      </>
+    ) : (
+      <>
+        <li key={props.item}>{props.item}
+          <button onClick={() => {
+            setEdit(true);
+          }}>edit</button>
+          <button onClick={() => {
+            props.delFunc(props.index);
+          }}>del</button>
+        </li>
+      </>
+    )}
+    </>
+  )
+}
+
 const FunctionalInput = ({ name }) => {
   /*
     We declare two state variables and their setters,
@@ -26,6 +68,12 @@ const FunctionalInput = ({ name }) => {
     setInputVal('');
   };
 
+  const handleEdit = (index, value) => {
+    let newTodos = todos.slice(0);
+    newTodos[index] = value;
+    setTodos(newTodos);
+  };
+
   const handleDel = (index) => {
     let newTodos = todos.slice(0);
     newTodos.splice(index, 1)
@@ -36,6 +84,7 @@ const FunctionalInput = ({ name }) => {
     let count = 0;
 
     todos.forEach(todo => {
+      console.log(todo);
       count +=1;
     });
     
@@ -61,13 +110,7 @@ const FunctionalInput = ({ name }) => {
       {/* The list of all the To-Do's, displayed */}
       <ul>
         {todos.map((todo, index) => (
-          <>
-            <li key={todo}>{todo}
-              <button onClick={() => {
-                handleDel(index)
-              }}>del</button>
-            </li>
-          </>
+          <ListItem item={todo} index={index} editFunc={handleEdit} delFunc={handleDel}></ListItem>
         ))}
       </ul>
     </section>
