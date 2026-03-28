@@ -1,5 +1,17 @@
 import React, { Component } from "react";
 
+class DisplayCount extends Component {
+  constructor(props) {
+    super(props);
+  };
+
+  render() {
+  return(
+    <div>Todos count: {this.props.count}</div>
+  )
+  }
+}
+
 class ClassInput extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +24,7 @@ class ClassInput extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDel = this.handleDel.bind(this);
+    this.todosCount = this.todosCount.bind(this);
   }
 
   handleInputChange(e) {
@@ -38,10 +51,20 @@ class ClassInput extends Component {
     }));
   }
 
+  todosCount() {
+    let count = 0;
+
+    this.state.todos.forEach(todo => {
+      count +=1;
+    });
+    
+    return count;
+  }
+
   render() {
     return (
       <section>
-        <h3>{this.props.name}</h3>
+        <h3>{this.props.name}</h3>      <DisplayCount count={this.todosCount()}></DisplayCount>
         {/* The input field to enter To-Do's */}
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="task-entry">Enter a task: </label>
